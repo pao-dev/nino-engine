@@ -1,0 +1,66 @@
+* {
+  margin: 0;
+  padding: 0;
+} /* to remove the top and left whitespace */
+
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: darkcyan;
+} /* just to be sure these are full screen*/
+
+#main-canvas {
+  margin: auto;
+  display: block;
+
+  width: 768px;
+  height: 768px;
+  position: relative;
+  border: 1px solid white;
+}
+
+/* #canvas-elements {
+  z-index: 1;
+}
+
+#canvas-background {
+  z-index: 0;
+} */
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* max-width: 44em; */
+  /* position: fixed;
+  left: 0;
+  top: 0; */
+  /* width: 100%;
+  height: 100%; */
+} /* To remove the scrollbars */
+
+.data {
+  width: 768px;
+  margin: auto;
+}
+
+.data-info {
+  color: rgb(255, 255, 255);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.6rem;
+  font-weight: normal;
+  float: left;
+}
+
+#data-turn {
+  width: 50%;
+}
+
+#data-material-wood {
+  width: 25%;
+}
+
+#data-material-rock {
+  width: 25%;
+}

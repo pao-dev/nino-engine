@@ -1,29 +1,23 @@
+import { position } from "./interfaces";
+import Sprite from "./sprite.js";
+
 export default class Object {
   public static instances: any = {};
-  public static blocks = [];
-  public static idCount = 0;
 
-  public position: any;
+  public position: position;
 
   private id: number;
   private mask: any;
-  private sprite: any;
 
   constructor(properties: any) {
-    const { id, position } = properties;
+    const { id, position, sprite } = properties;
 
     this.id = id;
-
     this.position = position;
-
-    // this.sprite = {
-    // 	width: undefined,
-    // 	height: undefined
-    // };
 
     this.mask = {
       width: undefined,
-      height: undefined,
+      height: undefined
     };
 
     // Llamar funcion create
@@ -44,6 +38,10 @@ export default class Object {
     Object.instances[groupName] = [];
   }
 
+  static getGroup(groupName: string) {
+    return Object.instances[groupName];
+  }
+
   /**
    * * Create an object
    *
@@ -53,13 +51,17 @@ export default class Object {
    */
   static create(group: string, object: any, properties: any) {
     const obj = new object({
-      id: this.idGenerator(),
+      id: Object.idGenerator(),
       position: properties.position,
+      sprite: properties.sprite
     });
-    // Push the object into the array
 
+    // Push the object into the array
     Object.instances[group].push(obj);
 
+    if (group == "players") {
+      console.log("jugador");
+    }
     return obj;
   }
 
@@ -93,12 +95,12 @@ export default class Object {
   // }
 
   // Dibujar sprite
-  drawSprite(
-    ctx: CanvasRenderingContext2D,
-    interpolation: number,
-    xOffset: number = 0,
-    yOffset: number = 0
-  ) {
-    this.sprite.draw(ctx, interpolation, this.position);
-  }
+  // drawSprite(
+  //   ctx: CanvasRenderingContext2D,
+  //   interpolation: number,
+  //   xOffset: number = 0,
+  //   yOffset: number = 0
+  // ) {
+  //   this.sprite.draw(ctx, interpolation, this.position);
+  // }
 }

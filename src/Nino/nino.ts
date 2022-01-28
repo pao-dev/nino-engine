@@ -1,13 +1,26 @@
+import Input from "./input.js";
+import { config } from "./interfaces.js";
+import Layer from "./layer.js";
+import Loader from "./loader.js";
+import Math2 from "./math.js";
 import Object from "./object.js";
+import Timer from "./timer.js";
 
 class Nino {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
-  private fps: number;
-  private frameDuration: number;
-  private prevTime: number;
-  private accumulatedFrameTime: number;
-  private fpsCount: number;
+  public static Load = Loader;
+  public static Object = Object;
+  public static Input = Input;
+  public static Math = Math2;
+  public static Layer = Layer;
+
+  public ctx: CanvasRenderingContext2D;
+  public canvas: HTMLCanvasElement;
+
+  public backgroundColor: string | CanvasGradient | CanvasPattern;
+
+  public timer: Timer;
+  public loader: Loader;
+  public layer: Layer;
 
   /**
    * Create the mane engine object
@@ -16,20 +29,23 @@ class Nino {
   constructor(config: config) {
     // Canvas setup
     this.canvas = document.createElement("canvas");
-    this.canvas.id = "nino-canvas";
+    this.canvas.id = "canvas-elements";
     this.canvas.width = config.width;
     this.canvas.height = config.height;
+    this.canvas.style.zIndex = "1";
 
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    // Main loop
-    this.fps = config.frames;
-    this.frameDuration = 1000 / this.fps;
-    this.prevTime = performance.now();
-    this.accumulatedFrameTime = 0;
-    this.fpsCount = 0;
+    this.backgroundColor = config.backgroundColor ?? "#374a52";
 
-    this.init();
+    // Loader
+    this.loader = new Loader();
+
+    // loop
+    this.timer = new Timer();
+
+    // Layer
+    this.layer = new Layer();
   }
 
   /**
@@ -37,61 +53,29 @@ class Nino {
    *
    * @returns {void}
    */
-  init(): void {
-    this.preload().then(() => {
-      // Nino Message
+  private init(): void {
+    this.loader.preload();
+    this.loader.mainLoader().then(() => {
+      // Console Message
       console.log(
         "%c Nino.JS v2.0.0 ",
         "color: black; font-weight: 900; background-color: aquamarine"
       );
 
-      // Create Canvas
-      document.body.appendChild(this.canvas);
+      // Add canvas to the page
+      let e: any = document.getElementById("main-canvas");
+      e.appendChild(this.canvas);
 
-      // Start main loop
-      window.requestAnimationFrame((timeStamp) => {
-        this.loop(timeStamp);
-      });
+      // Time manager
+      this.timer.updateManager = (deltaTime) => this.updateManager(deltaTime);
+      this.timer.renderManager = (interpolation) =>
+        this.renderManager(interpolation);
+
+      // Input
+      Nino.Input.init(this.canvas);
 
       // Start object start methed
-      this.create();
-    });
-  }
-
-  /**
-   * Main Loop
-   *
-   * @param {number} time Keep track of the time
-   * @returns {void}
-   */
-  loop(time: number): void {
-    const elapsedTimeBetweenFrames = time - this.prevTime;
-    this.prevTime = time;
-    this.accumulatedFrameTime += elapsedTimeBetweenFrames;
-
-    let numberOfUpdates = 0;
-
-    while (this.accumulatedFrameTime >= this.frameDuration) {
-      this.updateManager(this.frameDuration);
-      this.accumulatedFrameTime -= this.frameDuration;
-
-      // sanity check
-      if (numberOfUpdates++ >= 200) {
-        this.accumulatedFrameTime = 0;
-        console.log("restore");
-        // restoreTheGameState();
-        break;
-      }
-    }
-
-    this.fpsCount = Math.round(1 / (elapsedTimeBetweenFrames / 1000));
-
-    // this is a percentage of time
-    const interpolate = this.accumulatedFrameTime / this.frameDuration;
-    this.render(interpolate);
-
-    window.requestAnimationFrame((timeStamp) => {
-      this.loop(timeStamp);
+      this.setup();
     });
   }
 
@@ -101,10 +85,10 @@ class Nino {
    * @param {number} delta Delta time
    * @returns {void}
    */
-  updateManager(delta: number) {
+  private updateManager(deltaTime: number) {
     for (let group in Object.instances) {
       Object.instances[group].forEach((object: any) => {
-        object.update(this.frameDuration);
+        object.update(deltaTime);
       });
     }
   }
@@ -115,15 +99,16 @@ class Nino {
    * @param {number} interpolation The interpolate value
    * @returns {void}
    */
-  render(interpolation: number): void {
+  private renderManager(interpolation: number): void {
     // Clear the canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // Draw default background
-    this.ctx.fillStyle = "#374a52";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    // this.ctx.fillStyle = this.backgroundColor;
+    // this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Draw the game objects
+    // draw objects
+
     for (let group in Object.instances) {
       Object.instances[group].forEach((object: any) => {
         object.draw(this.ctx, interpolation);
@@ -131,14 +116,18 @@ class Nino {
     }
   }
 
-  preload(): any {}
-  create(): void {}
-}
+  public setup() {
+    throw new Error("Method not implemented.");
+  }
 
-interface config {
-  frames: number;
-  width: number;
-  height: number;
+  public start(): any {
+    this.init();
+  }
+
+  public static warning(message: string): null {
+    console.warn(message);
+    return null;
+  }
 }
 
 export default Nino;

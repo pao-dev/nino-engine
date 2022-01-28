@@ -26,16 +26,11 @@ export default class Sprite {
     this.scale = scale;
   }
 
-  interpolate = (min: number, max: number, fract: number): number =>
-    max + (min - max) * fract;
-
   draw(ctx: any, interpolation: number, position: any) {
-    // console.log(interpolation);
-
-    let x = position.lastX + (position.x - position.lastX) * interpolation;
-    let y = position.lastY + (position.y - position.lastY) * interpolation;
-    // let x = this.interpolate(position.lastX, position.x, interpolation);
-    // let y = this.interpolate(position.lastY, position.y, interpolation);
+    let x = position.x;
+    let y = position.y;
+    // let x = position.lastX + (position.x - position.lastX) * interpolation;
+    // let y = position.lastY + (position.y - position.lastY) * interpolation;
 
     ctx.drawImage(
       this.image,
@@ -45,8 +40,8 @@ export default class Sprite {
       this.height,
       x,
       y,
-      this.width * 1,
-      this.height * 1
+      this.width * this.scale,
+      this.height * this.scale
     );
   }
 }

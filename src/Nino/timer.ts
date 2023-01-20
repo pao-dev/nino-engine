@@ -5,7 +5,6 @@ class Timer {
   private accumulatedFrameTime: number;
 
   constructor() {
-    // this.fps = 60;
     this.fps = 30;
     this.frameDuration = 1000 / this.fps;
     this.prevTime = performance.now();
@@ -23,11 +22,11 @@ class Timer {
    * @returns {void}
    */
   mainLoop(time: number): void {
-    const elapsedTimeBetweenFrames = time - this.prevTime;
+    const elapsedTimeBetweenFrames: number = time - this.prevTime;
     this.prevTime = time;
     this.accumulatedFrameTime += elapsedTimeBetweenFrames;
 
-    let numberOfUpdates = 0;
+    let numberOfUpdates: number = 0;
 
     while (this.accumulatedFrameTime >= this.frameDuration) {
       this.update(this.frameDuration);
@@ -43,7 +42,7 @@ class Timer {
     }
 
     // this is a percentage of time
-    const interpolate = this.accumulatedFrameTime / this.frameDuration;
+    const interpolate: number = this.accumulatedFrameTime / this.frameDuration;
     this.renderManager(interpolate);
     this.render(interpolate);
 

@@ -1,6 +1,6 @@
-import { config, imageSettings, spriteSettings } from "./interfaces";
-import Nino from "./nino.js";
-import Sprite from "./sprite.js";
+import { config, imageSettings, spriteSettings } from './interfaces';
+import Nino from './nino';
+import Sprite from './sprite';
 
 class Loader {
   private static imageBuffer: Map<string, any>;
@@ -48,7 +48,7 @@ class Loader {
     return new Promise((resolve) => {
       const image = new Image();
 
-      image.addEventListener("load", () => resolve(image));
+      image.addEventListener('load', () => resolve(image));
 
       image.src = url;
     });

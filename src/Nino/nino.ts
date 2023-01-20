@@ -1,14 +1,14 @@
-import Input from "./input.js";
-import { config } from "./interfaces.js";
-import Layer from "./layer.js";
-import Loader from "./loader.js";
-import Math2 from "./math.js";
-import Object from "./object.js";
-import Timer from "./timer.js";
+import Input from './input';
+import { config } from './interfaces';
+import Layer from './layer';
+import Loader from './loader';
+import Math2 from './math';
+import Instance from './object';
+import Timer from './timer';
 
 class Nino {
   public static Load = Loader;
-  public static Object = Object;
+  public static Object = Instance;
   public static Input = Input;
   public static Math = Math2;
   public static Layer = Layer;
@@ -28,15 +28,15 @@ class Nino {
    */
   constructor(config: config) {
     // Canvas setup
-    this.canvas = document.createElement("canvas");
-    this.canvas.id = "canvas-elements";
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'canvas-elements';
     this.canvas.width = config.width;
     this.canvas.height = config.height;
-    this.canvas.style.zIndex = "1";
+    this.canvas.style.zIndex = '1';
 
-    this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
+    this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    this.backgroundColor = config.backgroundColor ?? "#374a52";
+    this.backgroundColor = config.backgroundColor ?? '#374a52';
 
     // Loader
     this.loader = new Loader();
@@ -58,12 +58,12 @@ class Nino {
     this.loader.mainLoader().then(() => {
       // Console Message
       console.log(
-        "%c Nino.JS v2.0.0 ",
-        "color: black; font-weight: 900; background-color: aquamarine"
+        '%c Nino.JS v2.0.0 ',
+        'color: black; font-weight: 900; background-color: aquamarine'
       );
 
       // Add canvas to the page
-      let e: any = document.getElementById("main-canvas");
+      let e: any = document.getElementById('main-canvas');
       e.appendChild(this.canvas);
 
       // Time manager
@@ -86,8 +86,8 @@ class Nino {
    * @returns {void}
    */
   private updateManager(deltaTime: number) {
-    for (let group in Object.instances) {
-      Object.instances[group].forEach((object: any) => {
+    for (let group in Instance.instances) {
+      Instance.instances[group].forEach((object: any) => {
         object.update(deltaTime);
       });
     }
@@ -109,15 +109,15 @@ class Nino {
 
     // draw objects
 
-    for (let group in Object.instances) {
-      Object.instances[group].forEach((object: any) => {
+    for (let group in Instance.instances) {
+      Instance.instances[group].forEach((object: any) => {
         object.draw(this.ctx, interpolation);
       });
     }
   }
 
   public setup() {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   public start(): any {

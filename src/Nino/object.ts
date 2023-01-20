@@ -1,7 +1,7 @@
-import { position } from "./interfaces";
-import Sprite from "./sprite.js";
+import { position } from './interfaces';
+import Sprite from './sprite';
 
-export default class Object {
+export default class Instance {
   public static instances: any = {};
 
   public position: position;
@@ -31,15 +31,22 @@ export default class Object {
    * @return {string}
    */
   static idGenerator() {
-    return "_" + Math.random().toString(36).substr(2, 9);
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   }
 
   static defineGroup(groupName: string) {
-    Object.instances[groupName] = [];
+    Instance.instances[groupName] = [];
   }
 
   static getGroup(groupName: string) {
-    return Object.instances[groupName];
+    return Instance.instances[groupName];
   }
 
   /**
@@ -51,17 +58,14 @@ export default class Object {
    */
   static create(group: string, object: any, properties: any) {
     const obj = new object({
-      id: Object.idGenerator(),
+      id: Instance.idGenerator(),
       position: properties.position,
       sprite: properties.sprite
     });
 
     // Push the object into the array
-    Object.instances[group].push(obj);
+    Instance.instances[group].push(obj);
 
-    if (group == "players") {
-      console.log("jugador");
-    }
     return obj;
   }
 
@@ -73,9 +77,9 @@ export default class Object {
    * @return {void}
    */
   static destroy(object: any) {
-    for (const [index, element] of Object.instances.entries()) {
+    for (const [index, element] of Instance.instances.entries()) {
       if (element.id === object.id) {
-        Object.instances.splice(index, 1);
+        Instance.instances.splice(index, 1);
         break;
       }
     }

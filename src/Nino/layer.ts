@@ -1,4 +1,4 @@
-class Layer {
+export default class Layer {
   public static layerBuffer: any = new Map();
   constructor() {}
   public static create(
@@ -19,5 +19,3 @@ class Layer {
     return Layer.get(id);
   }
 }
-
-export default Layer;

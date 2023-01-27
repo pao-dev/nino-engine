@@ -2,10 +2,13 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 // const PROD = JSON.parse(process.env.PROD_ENV || '0');
 
+const terserOptions = {};
+
 module.exports = {
   target: 'web',
   mode: 'production',
-  entry: './src/Nino/nino.ts',
+  // entry: './src/Nino/nino.ts',
+  entry: './src/game/main.ts',
   module: {
     rules: [
       {
@@ -24,6 +27,16 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin()]
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          mangle: {
+            properties: {
+              reserved: ['driveTo']
+            }
+          }
+        }
+      })
+    ]
   }
 };

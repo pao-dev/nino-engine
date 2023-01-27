@@ -1,4 +1,8 @@
-class Vector {
+/**
+ * Main vector module
+ * @module Vector
+ */
+export default class Vector {
   public x: number;
   public y: number;
 

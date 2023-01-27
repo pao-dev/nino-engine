@@ -1,8 +1,12 @@
-import { config, imageSettings, spriteSettings } from './interfaces';
+import { imageSettings, spriteSettings } from './interfaces/interfaces';
 import Nino from './nino';
 import Sprite from './sprite';
 
-class Loader {
+/**
+ * Main loaer handler module
+ * @module Loader
+ */
+export default class Loader {
   private static imageBuffer: Map<string, any>;
   private static spriteBuffer: Map<string, any>;
 
@@ -118,5 +122,3 @@ class Loader {
     return sprite;
   }
 }
-
-export default Loader;

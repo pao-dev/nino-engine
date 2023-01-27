@@ -1,3 +1,8 @@
+
+/**
+ * Main Input handler module
+ * @module Input
+ */
 class Input {
   public static mouseX: number = 0;
   public static mouseY: number = 0;
@@ -12,21 +17,18 @@ class Input {
   constructor() {}
 
   public static init(canvas: any) {
-    // keys
     ["keydown", "keyup"].forEach((eventName) => {
       window.addEventListener(eventName, (event) => {
         Input.eventHandler(event);
       });
     });
 
-    // mouse
     ["mousedown", "mouseup"].forEach((eventName) => {
       window.addEventListener(eventName, (event) => {
         Input.eventHandlerMouse(event);
       });
     });
 
-    // Mouse move
     document.addEventListener("mousemove", (event) => {
       var cRect = canvas.getBoundingClientRect();
       Input.mouseX = Math.round(event.clientX - cRect.left);
@@ -46,7 +48,6 @@ class Input {
   }
 
   public static eventHandler(event: any) {
-    // Evitar funcionamiento por defecto
     event.preventDefault();
 
     const input = {
@@ -54,17 +55,14 @@ class Input {
       state: event.type === "keydown" ? 1 : 0
     };
 
-    // Si el estado es igual al estado
     if (Input.keyMap.get(input.key) === input.state) {
       return;
     }
 
-    // Asigar estado de teclas presionadas
     if (!input.state) {
       Input.pressed.set(input.key, false);
     }
 
-    // Asignar los valores
     Input.keyMap.set(input.key, input.state);
   }
 
@@ -77,7 +75,6 @@ class Input {
   }
 
   public static eventHandlerMouse(event: any) {
-    // Evitar funcionamiento por defecto
     event.preventDefault();
 
     const input = {
@@ -85,12 +82,10 @@ class Input {
       state: event.type === "mousedown" ? 1 : 0
     };
 
-    // Si el estado es igual al estado
     if (Input.mouseMap.get(input.key) === input.state) {
       return;
     }
 
-    // // Asigar estado de teclas presionadas
     if (!input.state) {
       Input.mousePressed.set(input.key, false);
     }

@@ -1,3 +1,7 @@
+/**
+ * Main sprite module
+ * @module Sprite
+ */
 export default class Sprite {
   private image: any;
   private sx: number;
